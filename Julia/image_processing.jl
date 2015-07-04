@@ -77,7 +77,7 @@ Output:
 ------
 
 out: Image{RGB} 
-"""
+""" ->
 function white_patch(img::AbstractArray)
     x, y = size(img) 
     out = zeros(img)
@@ -108,7 +108,7 @@ Output:
 ------
 
 counts: Vector{Float64,1}
-"""
+""" ->
 function histogram(img)
     
     _, counts = hist(img[:], -1/256:1/256:1)
@@ -130,7 +130,7 @@ Output:
 ------
 
 img_eq: Image{Gray}
-"""
+""" ->
 function eq_hist(img_gray)
     
     h = histogram(img_gray) # calculate the histogram
@@ -156,7 +156,7 @@ Output:
 
 img_fc: Image{RGB}
 
-"""
+""" ->
 function fc(img)
     
     # LUT colors
@@ -201,7 +201,7 @@ Output:
 ------
 
 T: Optimal segmentation value: Float64 
-"""
+""" ->
 function segment_Gonz(img_gray)
     T = 0.5 * (minimum(img_gray) + maximum(img_gray)) 
     flag = false
