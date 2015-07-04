@@ -24,10 +24,28 @@
 
 ---------------------------------------------------------------------------=#
 module ImageProcessing
+#-------------------------------------------------------------------------
+# Imports
+#-------------------------------------------------------------------------
+using Images, Color, Docile
 
-using Images, Color
+#-------------------------------------------------------------------------
+# Functions
+#-------------------------------------------------------------------------
+@doc """
+Transform a image in chromatics coordinates
 
-function chromatics_coord(img::AbstractArray)
+Input:
+-----
+
+img: Image{RGB} (from Images.jl)
+
+Output:
+------
+
+out: Image{RGB}
+""" ->
+function chromatics_coord(img::Image)
 
     x, y = size(img)
     a = zeros(img)
@@ -37,12 +55,29 @@ function chromatics_coord(img::AbstractArray)
             g = img[i, j].g 
             b = img[i, j].b
             s = r + g + b
+            if s == 0
+                continue
+            end
+
             a[i, j] = RGB(r / s, g / s, b / s)
         end
     end
     return a 
 end
 
+@doc """
+Conpute the white patch algorithm to a RGB image
+
+Input:
+-----
+
+img: Image{RGB} (from Images.jl)
+
+Output:
+------
+
+out: Image{RGB} 
+"""
 function white_patch(img::AbstractArray)
     x, y = size(img) 
     out = zeros(img)
@@ -61,6 +96,19 @@ function white_patch(img::AbstractArray)
     return out
 end
 
+@doc """
+Compute the histogram of a grayscale image or Vector
+
+Input:
+-----
+
+img: Image{Gray} - Array{Int, 2} - Array{Float64, 2}
+
+Output:
+------
+
+counts: Vector{Float64,1}
+"""
 function histogram(img)
     
     _, counts = hist(img[:], -1/256:1/256:1)
@@ -70,6 +118,19 @@ function histogram(img)
     
 end
 
+@doc """
+Compute and applied the histogram equalization of a image 
+
+Input:
+-----
+
+img_gray: Image{Gray}, Array{Float64, 2}
+
+Output:
+------
+
+img_eq: Image{Gray}
+"""
 function eq_hist(img_gray)
     
     h = histogram(img_gray) # calculate the histogram
@@ -82,7 +143,20 @@ function eq_hist(img_gray)
     return img_eq
 end
 
+@doc """
+Compute the false color map of a Image using a look-up table
 
+Input:
+-----
+
+img: Image{Gray}
+
+Output:
+------
+
+img_fc: Image{RGB}
+
+"""
 function fc(img)
     
     # LUT colors
@@ -115,7 +189,19 @@ function fc(img)
     return img_fc
 end
 
+@doc """
+Compute the optimal segmentation value of a image(Gonzalez-Woods)
 
+Input:
+-----
+
+img_gray: Image{Gray}
+
+Output:
+------
+
+T: Optimal segmentation value: Float64 
+"""
 function segment_Gonz(img_gray)
     T = 0.5 * (minimum(img_gray) + maximum(img_gray)) 
     flag = false
