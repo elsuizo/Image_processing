@@ -33,6 +33,41 @@ using Images, Color, Docile
 # Functions
 #-------------------------------------------------------------------------
 @doc """
+Conpute the threshold of a RGB Image
+
+Input:
+-----
+
+img: Image{RGB} (from Image.jl)
+
+c: RGB center value(like a center of mass)
+
+s: Array with the absolute distances which form a desire cube 
+
+example:
+-------
+```julia
+using Images, ImageView, Color
+c = RGB(117, 66, 38) /255 # normalized
+s = [113, 80, 77] / 255
+bin = RGB_threshold(img, c, s)
+
+```
+""" ->
+function RGB_threshold(img::Image, c::RGB, s::Array)
+    x, y = size(img)
+    r = red(img)
+    g = green(img)
+    b = blue(img)
+    r_thresh = (c.r - s[1]/2) .< r .< (c.r + s[1]/2)
+    g_thresh = (c.g - s[2]/2) .< g .< (c.g + s[2]/2)
+    b_thresh = (c.b - s[3]/2) .< b .< (c.b + s[3]/2)
+    
+    return r_thresh & g_thresh & b_thresh
+end
+
+
+@doc """
 Transform a image in chromatics coordinates
 
 Input:
