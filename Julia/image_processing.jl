@@ -25,12 +25,12 @@
 ---------------------------------------------------------------------------=#
 module ImageProcessing
 #-------------------------------------------------------------------------
-# Imports
+# imports
 #-------------------------------------------------------------------------
 using Images, Color, Docile
 
 #-------------------------------------------------------------------------
-# Functions
+# functions
 #-------------------------------------------------------------------------
 @doc """
 Conpute the threshold of a RGB Image
@@ -65,6 +65,39 @@ function RGB_threshold(img::Image, c::RGB, s::Array)
     
     return r_thresh & g_thresh & b_thresh
 end
+
+
+@doc """
+Colored a label components Array 
+
+Input:
+-----
+label: Array{Int64, 2}
+
+Output:
+------
+
+label_color: Array{RGB{Float64}}
+""" ->
+function colored_labels(label::Array{Int64, 2})
+    x, y = size(label)
+    nums_labels = maximum(label)
+    colors = [RGB(a, b, c) for a in rand(nums_labels), b in rand(nums_labels), c in rand(nums_labels)] 
+    label_color = zeros(RGB{Float64}, x, y)
+    for j in 1:y
+        for i in 1:x
+            for k in 1:nums_labels
+                if(label[i,j] == k)
+                    label_color[i,j] = colors[k]
+                end
+            end
+        end
+    end
+    
+    return label_color
+
+end
+
 
 
 @doc """
