@@ -79,10 +79,13 @@ Output:
 
 label_color: Array{RGB{Float64}}
 """ ->
-function colored_labels(label::Array{Int64, 2})
+function colored_labels(label::Array{Int, 2})
     x, y = size(label)
     nums_labels = maximum(label)
-    colors = [RGB(a, b, c) for a in rand(nums_labels), b in rand(nums_labels), c in rand(nums_labels)] 
+    r = [RGB(a, 0, 0) for a in rand(nums_labels)] 
+    g = [RGB(0, b, 0) for b in rand(nums_labels)] 
+    b = [RGB(0, 0, c) for c in rand(nums_labels)] 
+    colors = r + g + b
     label_color = zeros(RGB{Float64}, x, y)
     for j in 1:y
         for i in 1:x
