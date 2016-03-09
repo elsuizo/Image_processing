@@ -32,7 +32,7 @@ using Images, Color, Docile
 #-------------------------------------------------------------------------
 # functions
 #-------------------------------------------------------------------------
-@doc """
+"""
 Conpute the threshold of a RGB Image
 
 Input:
@@ -53,7 +53,7 @@ s = [113, 80, 77] / 255
 bin = RGB_threshold(img, c, s)
 
 ```
-""" ->
+""" 
 function RGB_threshold(img::Image, c::RGB, s::Array)
     x, y = size(img)
     r = red(img)
@@ -67,7 +67,7 @@ function RGB_threshold(img::Image, c::RGB, s::Array)
 end
 
 
-@doc """
+"""
 Colored a label components Array 
 
 Input:
@@ -78,7 +78,7 @@ Output:
 ------
 
 label_color: Array{RGB{Float64}}
-""" ->
+""" 
 function colored_labels(label::Array{Int, 2})
     x, y = size(label)
     nums_labels = maximum(label)
@@ -103,7 +103,7 @@ end
 
 
 
-@doc """
+"""
 Transform a image in chromatics coordinates
 
 Input:
@@ -115,7 +115,7 @@ Output:
 ------
 
 out: Image{RGB}
-""" ->
+""" 
 function chromatics_coord(img::Image)
 
     x, y = size(img)
@@ -136,7 +136,7 @@ function chromatics_coord(img::Image)
     return a 
 end
 
-@doc """
+"""
 Conpute the white patch algorithm to a RGB image
 
 Input:
@@ -148,7 +148,7 @@ Output:
 ------
 
 out: Image{RGB} 
-""" ->
+""" 
 function white_patch(img::AbstractArray)
     x, y = size(img) 
     out = zeros(img)
@@ -167,7 +167,7 @@ function white_patch(img::AbstractArray)
     return out
 end
 
-@doc """
+"""
 Compute the histogram of a grayscale image or Vector
 
 Input:
@@ -179,7 +179,7 @@ Output:
 ------
 
 counts: Vector{Float64,1}
-""" ->
+""" 
 function histogram(img)
     
     _, counts = hist(img[:], -1/256:1/256:1)
@@ -189,7 +189,7 @@ function histogram(img)
     
 end
 
-@doc """
+"""
 Compute and applied the histogram equalization of a image 
 
 Input:
@@ -201,7 +201,7 @@ Output:
 ------
 
 img_eq: Image{Gray}
-""" ->
+""" 
 function eq_hist(img_gray)
     
     h = histogram(img_gray) # calculate the histogram
@@ -214,7 +214,7 @@ function eq_hist(img_gray)
     return img_eq
 end
 
-@doc """
+"""
 Compute the false color map of a Image using a look-up table
 
 Input:
@@ -227,7 +227,7 @@ Output:
 
 img_fc: Image{RGB}
 
-""" ->
+"""
 function fc(img)
     
     # LUT colors
@@ -260,7 +260,7 @@ function fc(img)
     return img_fc
 end
 
-@doc """
+"""
 Compute the optimal segmentation value of a image(Gonzalez-Woods)
 
 Input:
@@ -272,7 +272,7 @@ Output:
 ------
 
 T: Optimal segmentation value: Float64 
-""" ->
+"""
 function segment_Gonz(img_gray)
     T = 0.5 * (minimum(img_gray) + maximum(img_gray)) 
     flag = false
