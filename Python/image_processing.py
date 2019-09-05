@@ -9,6 +9,7 @@ License: MIT
 #*************************************************************************
 # Imports
 import numpy as np
+import cv2
 #*************************************************************************
 
 def salt_and_pepper(image, n):
@@ -328,6 +329,3 @@ def imnoise(im, sigma, mu):
     R = (sigma * np.random.rand(M,N) + mu) + im
 
     return R
-
-
-

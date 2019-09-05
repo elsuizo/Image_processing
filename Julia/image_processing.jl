@@ -62,7 +62,6 @@ function RGB_threshold(img::Image, c::RGB, s::Array)
     r_thresh = (c.r - s[1]/2) .< r .< (c.r + s[1]/2)
     g_thresh = (c.g - s[2]/2) .< g .< (c.g + s[2]/2)
     b_thresh = (c.b - s[3]/2) .< b .< (c.b + s[3]/2)
-    
     return r_thresh & g_thresh & b_thresh
 end
 
@@ -82,9 +81,9 @@ label_color: Array{RGB{Float64}}
 function colored_labels(label::Array{Int, 2})
     x, y = size(label)
     nums_labels = maximum(label)
-    r = [RGB(a, 0, 0) for a in rand(nums_labels)] 
-    g = [RGB(0, b, 0) for b in rand(nums_labels)] 
-    b = [RGB(0, 0, c) for c in rand(nums_labels)] 
+    r = [RGB(a, 0, 0) for a in rand(nums_labels)]
+    g = [RGB(0, b, 0) for b in rand(nums_labels)]
+    b = [RGB(0, 0, c) for c in rand(nums_labels)]
     colors = r + g + b
     label_color = zeros(RGB{Float64}, x, y)
     for j in 1:y
@@ -96,7 +95,6 @@ function colored_labels(label::Array{Int, 2})
             end
         end
     end
-    
     return label_color
 
 end
@@ -122,8 +120,8 @@ function chromatics_coord(img::Image)
     a = zeros(img)
     for i in 1:x
         for j in 1:y
-            r = img[i, j].r 
-            g = img[i, j].g 
+            r = img[i, j].r
+            g = img[i, j].g
             b = img[i, j].b
             s = r + g + b
             if s == 0
@@ -133,7 +131,7 @@ function chromatics_coord(img::Image)
             a[i, j] = RGB(r / s, g / s, b / s)
         end
     end
-    return a 
+    return a
 end
 
 """
@@ -155,11 +153,11 @@ function white_patch(img::AbstractArray)
     r_m = maximum(red(img))
     g_m = maximum(green(img))
     b_m = maximum(blue(img))
-    
+
     for i in 1:x
         for j in 1:y
-            r = img[i, j].r 
-            g = img[i, j].g 
+            r = img[i, j].r
+            g = img[i, j].g
             b = img[i, j].b
             out[i, j] = RGB(r / r_m, g / g_m, b / b_m)
         end
@@ -179,18 +177,16 @@ Output:
 ------
 
 counts: Vector{Float64,1}
-""" 
+"""
 function histogram(img)
-    
     _, counts = hist(img[:], -1/256:1/256:1)
 
     s₁,s₂ = size(img_gray)
     return counts / (s₁ * s₂)
-    
 end
 
 """
-Compute and applied the histogram equalization of a image 
+Compute and applied the histogram equalization of a image
 
 Input:
 -----
@@ -201,16 +197,15 @@ Output:
 ------
 
 img_eq: Image{Gray}
-""" 
+"""
 function eq_hist(img_gray)
-    
     h = histogram(img_gray) # calculate the histogram
     h_eq = cumsum(h) # calculate the cumulative sum
     gr = [Gray(i) for i in h_eq] # generated the equalized grayscale map
     A = float(data(img_gray)) # convert to float
     dataint = iround(Uint8, 254*A + 1 ) # convert 1-254
     img_eq = ImageCmap(dataint, gr)
-    
+
     return img_eq
 end
 
@@ -229,12 +224,11 @@ img_fc: Image{RGB}
 
 """
 function fc(img)
-    
     # LUT colors
     red = zeros(256)
     green = zeros(256)
     blue = zeros(256)
-    
+
     # red LUT
     red[1:43] = 1.0
     red[43:85] = linspace(1, 0, 43)
@@ -251,12 +245,12 @@ function fc(img)
     blue[129:214] = 1.0
     blue[214:end] = linspace(1, 0, 43)
     blue = blue * RGB(0, 0, 1)
-    
+
     A = float(data(img)) # convert to float
     dataint = iround(Uint8, 254*A + 1 ) # convert
     false_color = red + green + blue # blend the colors
     img_fc = ImageCmap(dataint, false_color)
-    
+
     return img_fc
 end
 
